@@ -1,4 +1,4 @@
-.friends {
+.friends_container {
   width: 20%;
   max-width: 250px;
   display: flex;
@@ -55,7 +55,7 @@
 }
 
 @media (max-width: 768px) {
-  .friends {
+  .friends_container {
     max-width: none;
     width: 100%;
   }

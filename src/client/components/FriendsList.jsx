@@ -32,7 +32,7 @@ const FriendsList = (props) => {
   };
 
   return (
-    <div className={props.friendsListHidden ? styles.friends_hidden : styles.friends}>
+    <div className={props.friendsListHidden ? styles.friends_hidden : styles.friends_container}>
       <div className={styles.friends_list}>
         {props.user.friends.length
           ? props.user.friends.map((friend) => (
