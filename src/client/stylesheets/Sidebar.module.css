@@ -1,5 +1,6 @@
 .sidebar {
   position: absolute;
+  z-index: 1;
   width: 20%;
   max-width: 250px;
   height: 100%;
@@ -29,8 +30,8 @@
 .sidebar > div > img,
 .sidebar > div > div > svg {
   align-self: center;
-  width: 75px;
-  height: 75px;
+  width: 100px;
+  height: 100px;
 }
 
 .sidebar > div > svg {

@@ -18,12 +18,9 @@ const Account = () => {
     sidebarContainer
   ] = useOutletContext();
 
-  const [searchedFriend, setSearchedFriend] = useState(null);
-
   const editName = useRef(null);
   const submitNameButton = useRef(null);
   const invalidUsername = useRef(null);
-  const friendsList = useRef(null);
   const formRef = useRef(null);
 
   const submitEditName = async () => {
@@ -42,45 +39,6 @@ const Account = () => {
       // displayEditName();
     } else {
       invalidUsername.current.style.display = "flex";
-    }
-  };
-
-  const searchFriendAccount = async (e) => {
-    try {
-      if (e.target.value) {
-        friendsList.current.style.display = "none";
-        for (const friend of user.friends) {
-          if (e.target.value === friend.username) {
-            setSearchedFriend(friend);
-            return;
-          } else {
-            setSearchedFriend(null);
-          }
-        }
-      } else {
-        friendsList.current.style.display = "block";
-        setSearchedFriend(null);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const FriendInputs = (props) => {
-    return (
-      <div className={styles.friend_account}>
-        <div>
-          <DisplayProfilePicture profile={props.friend} />
-          <p>{props.friend.username}</p>
-        </div>
-        <button onClick={() => removeFriend(props.friend)}>Remove</button>
-      </div>
-    );
-  };
-
-  const DisplaySearchedFriend = () => {
-    if (searchedFriend) {
-      return <FriendInputs friend={searchedFriend} />;
     }
   };
 

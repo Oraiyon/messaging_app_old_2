@@ -30,7 +30,7 @@ const SearchFriend = (props) => {
         name="friend_search"
         id="friend_search"
         onChange={findFriend}
-        placeholder="Search Chat"
+        placeholder="Search friend"
       />
     </form>
   );
