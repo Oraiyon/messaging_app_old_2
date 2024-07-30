@@ -45,24 +45,6 @@ const Account = () => {
     }
   };
 
-  const removeFriend = async (friend) => {
-    try {
-      // Use body instead of url?
-      const fetchUser = await fetch(`/api/friend/${user._id}/${friend._id}`, {
-        method: "PUT"
-      });
-      const data = await fetchUser.json();
-      setUser(data);
-      if (!data.friends.length) {
-        setCurrentChat(null);
-      } else {
-        setCurrentChat(data.friends[0]);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const searchFriendAccount = async (e) => {
     try {
       if (e.target.value) {
@@ -160,7 +142,7 @@ const Account = () => {
       );
     }
   };
-  // CHANGE REPO
+
   return (
     <>
       <Header
@@ -171,52 +153,28 @@ const Account = () => {
         sidebarContainer={sidebarContainer}
       />
       <div className={styles.account_container}>
-        <div className={styles.account_info}>
-          <h3>{user.username}</h3>
-          <DisplayProfilePicture profile={user} user={true} formRef={formRef} />
-          <div className={styles.edits}>
-            <div className={styles.edit_name_inputs}>
-              <label htmlFor="editName">Edit Username:</label>
-              <input
-                type="text"
-                id="editName"
-                name="editName"
-                placeholder={user.username}
-                className={styles.new_name}
-                ref={editName}
-              />
-              <p className={styles.username_taken_warning} ref={invalidUsername}>
-                Invalid username
-              </p>
-              <button
-                onClick={submitEditName}
-                className={styles.submit_name}
-                ref={submitNameButton}
-              >
-                Submit
-              </button>
-            </div>
-            <ProfilePictureForm />
-            <SetToDefaultPicture />
+        <h3>{user.username}</h3>
+        <DisplayProfilePicture profile={user} user={true} formRef={formRef} />
+        <div className={styles.edits}>
+          <div className={styles.edit_name_inputs}>
+            <label htmlFor="editName">Edit Username:</label>
+            <input
+              type="text"
+              id="editName"
+              name="editName"
+              placeholder={user.username}
+              className={styles.new_name}
+              ref={editName}
+            />
+            <p className={styles.username_taken_warning} ref={invalidUsername}>
+              Invalid username
+            </p>
+            <button onClick={submitEditName} className={styles.submit_name} ref={submitNameButton}>
+              Submit
+            </button>
           </div>
-        </div>
-        <div className={styles.friendsList_account}>
-          <label htmlFor="searchFriend">Search Friend</label>
-          <input
-            type="text"
-            name="friend"
-            id="searchFriend"
-            placeholder="Search Friend"
-            onChange={searchFriendAccount}
-          />
-          <DisplaySearchedFriend />
-          <div ref={friendsList} className={styles.friends_list}>
-            {user.friends.map((friend) => (
-              <div key={friend._id}>
-                <FriendInputs friend={friend} />
-              </div>
-            ))}
-          </div>
+          <ProfilePictureForm />
+          <SetToDefaultPicture />
         </div>
       </div>
     </>

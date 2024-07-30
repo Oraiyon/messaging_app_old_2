@@ -16,25 +16,37 @@
   scrollbar-width: thin;
 }
 
+.friends_list > div {
+  display: flex;
+  align-items: center;
+  padding: 0.25em;
+}
+
+.friends_list > div:hover {
+  background-color: var(--highlight-color);
+}
+
+.friends_list > .current_chat:hover {
+  background-color: var(--secondary-color);
+}
+
+.friends_list > div > button:hover {
+  border: 1px solid white;
+}
+
 .friend {
   display: flex;
   align-items: center;
   width: 100%;
   gap: 0.25em;
-  padding: 0.25em;
-}
-
-.friend:hover {
-  background-color: var(--highlight-color);
 }
 
 .current_chat {
   background-color: var(--secondary-color);
   color: black;
-  pointer-events: none;
 }
 
-.current_chat > div > div > svg {
+.current_chat > div > div > div > svg {
   border-color: black;
 }
 

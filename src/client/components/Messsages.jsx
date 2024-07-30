@@ -162,6 +162,7 @@ const Messages = () => {
         <FriendRequests
           user={user}
           setUser={setUser}
+          setCurrentChat={setCurrentChat}
           displayFriendRequests={displayFriendRequests}
         />
       </div>

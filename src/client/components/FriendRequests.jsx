@@ -23,6 +23,7 @@ const FriendRequests = (props) => {
       );
       const data = await fetchUser.json();
       props.setUser(data);
+      props.setCurrentChat(data.friends[0]);
     } catch (error) {
       console.log(error);
     }
