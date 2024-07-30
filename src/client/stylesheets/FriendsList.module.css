@@ -22,18 +22,6 @@
   padding: 0.25em;
 }
 
-.friends_list > div:hover {
-  background-color: var(--highlight-color);
-}
-
-.friends_list > .current_chat:hover {
-  background-color: var(--secondary-color);
-}
-
-.friends_list > div > button:hover {
-  border: 1px solid white;
-}
-
 .friend {
   display: flex;
   align-items: center;
@@ -48,6 +36,33 @@
 
 .current_chat > div > div > div > svg {
   border-color: black;
+}
+
+.remove_friend_button {
+  display: flex;
+  align-items: center;
+}
+
+.current_chat > .remove_friend_button {
+  background-color: var(--secondary-color);
+}
+
+.remove_friend_button > svg {
+  width: 30px;
+}
+
+.remove_friend_button > svg:hover {
+  color: red;
+}
+
+.chat:hover,
+.chat:hover > .remove_friend_button {
+  background-color: var(--highlight-color);
+}
+
+.chat > .remove_friend_button {
+  background-color: var(--primary-color);
+  color: white;
 }
 
 .friends_hidden {

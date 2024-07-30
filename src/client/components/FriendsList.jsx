@@ -1,6 +1,8 @@
 import styles from "../stylesheets/FriendsList.module.css";
 import SearchFriend from "./SearchFriend";
 import DisplayProfilePicture from "./DisplayProfilePicture";
+import Icon from "@mdi/react";
+import { mdiCloseCircle } from "@mdi/js";
 
 const FriendsList = (props) => {
   const displayCurrentChat = (friend) => {
@@ -41,14 +43,16 @@ const FriendsList = (props) => {
                 className={
                   props.currentChat && props.currentChat._id === friend._id
                     ? styles.current_chat
-                    : ""
+                    : styles.chat
                 }
               >
                 <div className={styles.friend} onClick={() => displayCurrentChat(friend)}>
                   <DisplayProfilePicture profile={friend} />
                   <p>{friend.username}</p>
                 </div>
-                <button onClick={() => removeFriend(friend)}>X</button>
+                <button className={styles.remove_friend_button}>
+                  <Icon path={mdiCloseCircle} onClick={() => removeFriend(friend)} />
+                </button>
               </div>
             ))
           : ""}
