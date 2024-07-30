@@ -1,0 +1,50 @@
+.friends {
+  width: 20%;
+  max-width: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.friends_list {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--primary-color);
+  color: white;
+  height: 100%;
+  overflow-y: scroll;
+  scrollbar-width: thin;
+}
+
+.friend {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 0.25em;
+  padding: 0.25em;
+}
+
+.friend:hover {
+  background-color: var(--highlight-color);
+}
+
+.current_chat {
+  background-color: var(--secondary-color);
+  color: black;
+  pointer-events: none;
+}
+
+.current_chat > div > div > svg {
+  border-color: black;
+}
+
+.friends_hidden {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .friends {
+    max-width: none;
+    width: 100%;
+  }
+}

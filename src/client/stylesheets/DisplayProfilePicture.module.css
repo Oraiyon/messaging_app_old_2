@@ -1,0 +1,35 @@
+.profile_picture {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+}
+
+.user_profile_picture {
+  width: 125px;
+  height: 125px;
+  border-radius: 50%;
+}
+
+.default_profile_picture {
+  display: flex;
+  align-items: center;
+}
+
+.default_profile_picture > svg {
+  border: 1px solid white;
+  border-radius: 50%;
+}
+
+.profile_picture_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.edit_picture_icon {
+  display: none;
+  position: absolute;
+  stroke: black;
+  stroke-width: 0.25px;
+  color: var(--highlight-color);
+}
