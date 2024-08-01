@@ -21,20 +21,24 @@ const Account = () => {
   const [userUsername, setUserUsername] = useState(user.username);
   const [userBio, setUserBio] = useState(user.bio);
 
-  const editName = useRef(null);
   const submitNameButton = useRef(null);
   const invalidUsername = useRef(null);
   const formRef = useRef(null);
 
   const submitEditName = async () => {
-    if (!editName.current.value || editName.current.value.length < 3) {
+    if (
+      !userUsername ||
+      userUsername.length < 3 ||
+      userUsername.length > 10 ||
+      userUsername === user.username
+    ) {
       invalidUsername.current.style.display = "flex";
       return;
     }
     const fetchUser = await fetch(`/api/${user._id}/profile/account/username`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ editName: editName.current.value })
+      body: JSON.stringify({ editName: userUsername })
     });
     const res = await fetchUser.json();
     if (res) {
@@ -112,7 +116,7 @@ const Account = () => {
         <textarea
           name="bio"
           id="bio"
-          value={user.bio ? user.bio : ""}
+          value={userBio}
           onChange={(e) => setUserBio(e.target.value)}
         ></textarea>
         <button>Submit</button>
@@ -141,10 +145,9 @@ const Account = () => {
                 type="text"
                 id="editName"
                 name="editName"
-                value={user.username}
+                value={userUsername}
                 onChange={(e) => setUserUsername(e.target.value)}
                 className={styles.new_name}
-                ref={editName}
               />
               <button
                 onClick={submitEditName}
@@ -155,7 +158,7 @@ const Account = () => {
               </button>
             </div>
             <p className={styles.username_taken_warning} ref={invalidUsername}>
-              Invalid username
+              Invalid username edit
             </p>
           </div>
           <ProfilePictureForm />
