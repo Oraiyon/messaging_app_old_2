@@ -44,9 +44,9 @@ const Account = () => {
   const changeProfilePicture = async (e) => {
     try {
       e.preventDefault();
-      if (formRef.current.children[1].value) {
+      if (formRef.current.children[1].children[0].value) {
         const formData = new FormData();
-        formData.append("file", formRef.current.children[1].files[0]);
+        formData.append("file", formRef.current.children[1].children[0].files[0]);
         const fetchUser = await fetch(`/api/${user._id}/profile/account/picture`, {
           method: "POST",
           body: formData

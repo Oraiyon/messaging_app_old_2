@@ -17,7 +17,7 @@ const DisplayProfilePicture = (props) => {
   };
 
   const openPictureForm = () => {
-    props.formRef.current.children[1].click();
+    props.formRef.current.children[1].children[0].click();
   };
 
   // Make profile.picture default to default pic?
