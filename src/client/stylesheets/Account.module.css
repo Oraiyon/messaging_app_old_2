@@ -13,6 +13,7 @@
   flex-direction: column;
   gap: 0.25em;
   width: 100%;
+  max-width: 1000px;
 }
 
 .edit_name_inputs {

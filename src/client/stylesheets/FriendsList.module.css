@@ -62,6 +62,7 @@
 .chat:hover,
 .chat:hover > .remove_friend_button {
   background-color: var(--highlight-color);
+  cursor: pointer;
 }
 
 .chat > .remove_friend_button {
