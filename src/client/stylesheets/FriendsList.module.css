@@ -29,6 +29,10 @@
   gap: 0.25em;
 }
 
+.friend > p {
+  text-overflow: ellipsis;
+}
+
 .current_chat {
   background-color: var(--secondary-color);
   color: black;

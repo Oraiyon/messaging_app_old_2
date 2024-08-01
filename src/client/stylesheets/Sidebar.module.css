@@ -17,6 +17,7 @@
 
 .sidebar > svg:hover {
   background-color: var(--highlight-color);
+  cursor: pointer;
 }
 
 .sidebar > a {

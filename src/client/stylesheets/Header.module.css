@@ -30,6 +30,7 @@
 
 .account_links > svg:hover {
   background-color: var(--highlight-color);
+  cursor: pointer;
 }
 
 .friends_list_button {

@@ -36,7 +36,6 @@ const Account = () => {
     const res = await fetchUser.json();
     if (res) {
       setUser(res);
-      // displayEditName();
     } else {
       invalidUsername.current.style.display = "flex";
     }
@@ -78,7 +77,7 @@ const Account = () => {
     if (user.picture) {
       return (
         <div className={styles.default_picture_button}>
-          <button onClick={setProfilePictureToDefault}>Set Picture To Default</button>
+          <button onClick={setProfilePictureToDefault}>Set Profile Picture To Default</button>
         </div>
       );
     }
@@ -93,9 +92,11 @@ const Account = () => {
           ref={formRef}
           className={styles.profile_picture_form}
         >
-          <label htmlFor="picture">Edit Profile Picture:</label>
-          <input type="file" name="picture" id="picture" />
-          <button>Submit</button>
+          <label htmlFor="picture">Profile Picture</label>
+          <div>
+            <input type="file" name="picture" id="picture" />
+            <button>Submit</button>
+          </div>
         </form>
       );
     }
@@ -115,21 +116,27 @@ const Account = () => {
         <DisplayProfilePicture profile={user} user={true} formRef={formRef} />
         <div className={styles.edits}>
           <div className={styles.edit_name_inputs}>
-            <label htmlFor="editName">Edit Username:</label>
-            <input
-              type="text"
-              id="editName"
-              name="editName"
-              placeholder={user.username}
-              className={styles.new_name}
-              ref={editName}
-            />
+            <label htmlFor="editName">Username</label>
+            <div>
+              <input
+                type="text"
+                id="editName"
+                name="editName"
+                placeholder={user.username}
+                className={styles.new_name}
+                ref={editName}
+              />
+              <button
+                onClick={submitEditName}
+                className={styles.submit_name}
+                ref={submitNameButton}
+              >
+                Submit
+              </button>
+            </div>
             <p className={styles.username_taken_warning} ref={invalidUsername}>
               Invalid username
             </p>
-            <button onClick={submitEditName} className={styles.submit_name} ref={submitNameButton}>
-              Submit
-            </button>
           </div>
           <ProfilePictureForm />
           <SetToDefaultPicture />

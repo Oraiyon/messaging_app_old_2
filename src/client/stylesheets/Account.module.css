@@ -12,43 +12,41 @@
   display: flex;
   flex-direction: column;
   gap: 0.25em;
+  width: 100%;
 }
 
-.edit_name_inputs,
-.edits > form,
-.default_picture_button {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.25em;
-  justify-items: center;
-  align-items: center;
-}
-
-.edit_name_inputs > label,
-.edits > form > label {
+.edit_name_inputs {
   display: flex;
-  justify-self: flex-end;
+  flex-direction: column;
+  gap: 0.25em;
 }
 
-.edit_name_inputs > button,
-.edits > form > button {
-  height: fit-content;
-  justify-self: flex-start;
+.edit_name_inputs > div {
+  display: flex;
+  gap: 0.25em;
 }
 
-.edits > form > input {
+.profile_picture_form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+}
+
+.profile_picture_form > div {
+  display: flex;
+  gap: 0.25em;
+}
+
+.profile_picture_form > div > input {
   width: 100%;
 }
 
 .default_picture_button > button {
-  grid-column: 2;
   width: 100%;
 }
 
 .username_taken_warning {
   display: none;
-  grid-column: 2;
-  grid-row: 2;
   color: red;
 }
 
@@ -61,27 +59,5 @@ input[type="file"]::file-selector-button {
 input[type="file"]::file-selector-button:hover {
   background-color: var(--highlight-color);
   color: white;
-}
-
-@media (max-width: 768px) {
-  .edit_name_inputs > label,
-  .edits > form > label {
-    grid-column: 2;
-    grid-row: 1;
-    justify-self: flex-start;
-  }
-
-  .edit_name_inputs > input,
-  .edits > form > input {
-    grid-column: 2;
-    grid-row: 2;
-  }
-
-  .edit_name_inputs > button,
-  .edits > form > button {
-    grid-column: 2;
-    grid-row: 2;
-    justify-self: flex-end;
-    border-left: 0.25em solid var(--primary-color);
-  }
+  cursor: pointer;
 }
