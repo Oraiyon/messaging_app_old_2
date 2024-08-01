@@ -3,11 +3,6 @@
   height: 100%;
 }
 
-form {
-  display: flex;
-  align-items: flex-end;
-}
-
 .chat {
   flex-grow: 1;
   height: 100%;

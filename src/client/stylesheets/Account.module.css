@@ -64,3 +64,9 @@ input[type="file"]::file-selector-button:hover {
   color: white;
   cursor: pointer;
 }
+
+.bio_form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+}

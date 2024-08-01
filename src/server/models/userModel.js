@@ -8,7 +8,9 @@ const UserSchema = new Schema({
   // ref = model
   friends: [{ type: Schema.Types.ObjectId, ref: "users" }],
   friendRequests: { type: Array },
-  picture: { type: String }
+  picture: { type: String },
+  // Add bio?
+  bio: { type: String }
 });
 
 export default mongoose.model("users", UserSchema);

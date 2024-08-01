@@ -59,3 +59,11 @@ input[type="password"] {
   align-items: center;
   position: relative;
 }
+
+form {
+  display: flex;
+}
+
+textarea {
+  border: none;
+}

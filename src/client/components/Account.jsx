@@ -18,6 +18,9 @@ const Account = () => {
     sidebarContainer
   ] = useOutletContext();
 
+  const [userUsername, setUserUsername] = useState(user.username);
+  const [userBio, setUserBio] = useState(user.bio);
+
   const editName = useRef(null);
   const submitNameButton = useRef(null);
   const invalidUsername = useRef(null);
@@ -102,6 +105,22 @@ const Account = () => {
     }
   };
 
+  const UpdateBioForm = () => {
+    return (
+      <form className={styles.bio_form}>
+        <label htmlFor="bio">Bio</label>
+        <textarea
+          name="bio"
+          id="bio"
+          value={user.bio ? user.bio : ""}
+          onChange={(e) => setUserBio(e.target.value)}
+        ></textarea>
+        <button>Submit</button>
+      </form>
+    );
+  };
+
+  // Change to one submit button for all edits
   return (
     <>
       <Header
@@ -122,7 +141,8 @@ const Account = () => {
                 type="text"
                 id="editName"
                 name="editName"
-                placeholder={user.username}
+                value={user.username}
+                onChange={(e) => setUserUsername(e.target.value)}
                 className={styles.new_name}
                 ref={editName}
               />
@@ -140,6 +160,7 @@ const Account = () => {
           </div>
           <ProfilePictureForm />
           <SetToDefaultPicture />
+          <UpdateBioForm />
         </div>
       </div>
     </>
