@@ -240,4 +240,18 @@ export const put_change_picture = expressAsyncHandler(async (req, res, next) => 
   res.json(user);
 });
 
+export const put_user_bio = [
+  body("editBio", "Invalid bio").isLength({ max: 100 }).escape(),
+  expressAsyncHandler(async (req, res, next) => {
+    const user = await User.findById(req.params.id).populate("friends").exec();
+    if (!errors.isEmpty()) {
+      res.json(user);
+      return;
+    }
+    user.bio = req.body.editBio;
+    await user.save();
+    res.json(user);
+  })
+];
+
 export default post_signup;

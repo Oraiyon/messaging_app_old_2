@@ -10,7 +10,8 @@ import post_signup, {
   put_remove_friend,
   put_edit_username,
   post_change_picture,
-  put_change_picture
+  put_change_picture,
+  put_user_bio
 } from "./controllers/userController.js";
 import post_send_message, { get_messages } from "./controllers/messageController.js";
 
@@ -58,5 +59,8 @@ router.post("/api/:id/profile/account/picture", post_change_picture);
 
 // Change user.picture to default
 router.put("/api/:id/profile/account/picture", put_change_picture);
+
+// Change user.bio
+router.put("api/:id/profile/account/bio", put_user_bio);
 
 export default router;

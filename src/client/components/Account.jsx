@@ -19,19 +19,17 @@ const Account = () => {
   ] = useOutletContext();
 
   const [userUsername, setUserUsername] = useState(user.username);
-  const [userBio, setUserBio] = useState(user.bio);
+  const [userProfilePic, setUserProfilePic] = useState(null);
+  const [userBio, setUserBio] = useState(user.bio ? user.bio : "");
 
-  const submitNameButton = useRef(null);
   const invalidUsername = useRef(null);
   const formRef = useRef(null);
 
   const submitEditName = async () => {
-    if (
-      !userUsername ||
-      userUsername.length < 3 ||
-      userUsername.length > 10 ||
-      userUsername === user.username
-    ) {
+    if (userUsername === user.username) {
+      return;
+    }
+    if (!userUsername || userUsername.length < 3 || userUsername.length > 10) {
       invalidUsername.current.style.display = "flex";
       return;
     }
@@ -40,9 +38,9 @@ const Account = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ editName: userUsername })
     });
-    const res = await fetchUser.json();
-    if (res) {
-      setUser(res);
+    const data = await fetchUser.json();
+    if (data) {
+      setUser(data);
     } else {
       invalidUsername.current.style.display = "flex";
     }
@@ -50,7 +48,6 @@ const Account = () => {
 
   const changeProfilePicture = async (e) => {
     try {
-      e.preventDefault();
       if (formRef.current.children[1].children[0].value) {
         const formData = new FormData();
         formData.append("file", formRef.current.children[1].children[0].files[0]);
@@ -93,16 +90,16 @@ const Account = () => {
   const ProfilePictureForm = () => {
     if (user) {
       return (
-        <form
-          action=""
-          onSubmit={changeProfilePicture}
-          ref={formRef}
-          className={styles.profile_picture_form}
-        >
+        // Resets when username is edited because the edit causes a state change
+        <form action="" ref={formRef} className={styles.profile_picture_form}>
           <label htmlFor="picture">Profile Picture</label>
           <div>
-            <input type="file" name="picture" id="picture" />
-            <button>Submit</button>
+            <input
+              type="file"
+              name="picture"
+              id="picture"
+              // onChange={(e) => setUserProfilePic(e.target.value.slice(12))}
+            />
           </div>
         </form>
       );
@@ -119,9 +116,30 @@ const Account = () => {
           value={userBio}
           onChange={(e) => setUserBio(e.target.value)}
         ></textarea>
-        <button>Submit</button>
       </form>
     );
+  };
+
+  const editUserBio = async () => {
+    try {
+      if (userBio.length > 0 && userBio.length <= 100) {
+        const fetchUser = await fetch(`api/${user._id}/profile/account/bio`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ editBio: userBio })
+        });
+        const data = fetchUser.json();
+        setUser(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const saveChanges = () => {
+    submitEditName();
+    changeProfilePicture();
+    editUserBio();
   };
 
   // Change to one submit button for all edits
@@ -140,23 +158,14 @@ const Account = () => {
         <div className={styles.edits}>
           <div className={styles.edit_name_inputs}>
             <label htmlFor="editName">Username</label>
-            <div>
-              <input
-                type="text"
-                id="editName"
-                name="editName"
-                value={userUsername}
-                onChange={(e) => setUserUsername(e.target.value)}
-                className={styles.new_name}
-              />
-              <button
-                onClick={submitEditName}
-                className={styles.submit_name}
-                ref={submitNameButton}
-              >
-                Submit
-              </button>
-            </div>
+            <input
+              type="text"
+              id="editName"
+              name="editName"
+              value={userUsername}
+              onChange={(e) => setUserUsername(e.target.value)}
+              className={styles.new_name}
+            />
             <p className={styles.username_taken_warning} ref={invalidUsername}>
               Invalid username edit
             </p>
@@ -164,6 +173,7 @@ const Account = () => {
           <ProfilePictureForm />
           <SetToDefaultPicture />
           <UpdateBioForm />
+          <button onClick={saveChanges}>Save Changes</button>
         </div>
       </div>
     </>

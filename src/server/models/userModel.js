@@ -10,7 +10,7 @@ const UserSchema = new Schema({
   friendRequests: { type: Array },
   picture: { type: String },
   // Add bio?
-  bio: { type: String, default: "No bio..." }
+  bio: { type: String }
 });
 
 export default mongoose.model("users", UserSchema);
