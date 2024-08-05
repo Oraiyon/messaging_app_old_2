@@ -103,7 +103,7 @@ const Account = () => {
           body: formData
         });
       }
-      if (editBioRef.current.value.length <= 100) {
+      if (editBioRef.current.value.length <= 100 && editBioRef.current.value !== user.bio) {
         await fetch(`/api/${user._id}/profile/account/bio`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
