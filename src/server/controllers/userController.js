@@ -244,6 +244,7 @@ export const put_user_bio = [
   body("editBio", "Invalid bio").isLength({ max: 100 }).escape(),
   expressAsyncHandler(async (req, res, next) => {
     const user = await User.findById(req.params.id).populate("friends").exec();
+    const errors = validationResult(req);
     if (!errors.isEmpty()) {
       res.json(user);
       return;
