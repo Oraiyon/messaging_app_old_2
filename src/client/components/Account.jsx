@@ -1,6 +1,6 @@
 import { useOutletContext } from "react-router-dom";
 import styles from "../stylesheets/Account.module.css";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import Header from "./Header";
 import DisplayProfilePicture from "./DisplayProfilePicture";
 
@@ -18,31 +18,33 @@ const Account = () => {
     sidebarContainer
   ] = useOutletContext();
 
-  const [userUsername, setUserUsername] = useState(user.username);
-  const [userProfilePic, setUserProfilePic] = useState(null);
-  const [userBio, setUserBio] = useState(user.bio ? user.bio : "");
-
+  const editUsernameRef = useRef(null);
   const invalidUsername = useRef(null);
   const formRef = useRef(null);
+  const editBioRef = useRef(null);
 
   const submitEditName = async () => {
-    if (userUsername === user.username) {
-      return;
-    }
-    if (!userUsername || userUsername.length < 3 || userUsername.length > 10) {
-      invalidUsername.current.style.display = "flex";
-      return;
-    }
-    const fetchUser = await fetch(`/api/${user._id}/profile/account/username`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ editName: userUsername })
-    });
-    const data = await fetchUser.json();
-    if (data) {
-      setUser(data);
-    } else {
-      invalidUsername.current.style.display = "flex";
+    try {
+      if (!editUsernameRef.current.value || editUsernameRef.current.value === user.username) {
+        return;
+      }
+      if (editUsernameRef.current.value.length < 3 || editUsernameRef.current.value.length > 10) {
+        invalidUsername.current.style.display = "flex";
+        return;
+      }
+      const fetchUser = await fetch(`/api/${user._id}/profile/account/username`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ editName: editUsernameRef.current.value })
+      });
+      const data = await fetchUser.json();
+      if (data) {
+        setUser(data);
+      } else {
+        invalidUsername.current.style.display = "flex";
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -90,16 +92,10 @@ const Account = () => {
   const ProfilePictureForm = () => {
     if (user) {
       return (
-        // Resets when username is edited because the edit causes a state change
         <form action="" ref={formRef} className={styles.profile_picture_form}>
           <label htmlFor="picture">Profile Picture</label>
           <div>
-            <input
-              type="file"
-              name="picture"
-              id="picture"
-              // onChange={(e) => setUserProfilePic(e.target.value.slice(12))}
-            />
+            <input type="file" name="picture" id="picture" />
           </div>
         </form>
       );
@@ -110,23 +106,21 @@ const Account = () => {
     return (
       <form className={styles.bio_form}>
         <label htmlFor="bio">Bio</label>
-        <textarea
-          name="bio"
-          id="bio"
-          value={userBio}
-          onChange={(e) => setUserBio(e.target.value)}
-        ></textarea>
+        <textarea name="bio" id="bio" defaultValue={user.bio} ref={editBioRef}></textarea>
       </form>
     );
   };
 
   const editUserBio = async () => {
     try {
-      if (userBio.length > 0 && userBio.length <= 100) {
-        const fetchUser = await fetch(`api/${user._id}/profile/account/bio`, {
+      if (editBioRef.current.value === user.bio) {
+        return;
+      }
+      if (editBioRef.current.value.length <= 100) {
+        const fetchUser = await fetch(`/api/${user._id}/profile/account/bio`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ editBio: userBio })
+          body: JSON.stringify({ editBio: editBioRef.current.value })
         });
         const data = fetchUser.json();
         setUser(data);
@@ -142,7 +136,6 @@ const Account = () => {
     editUserBio();
   };
 
-  // Change to one submit button for all edits
   return (
     <>
       <Header
@@ -162,8 +155,8 @@ const Account = () => {
               type="text"
               id="editName"
               name="editName"
-              value={userUsername}
-              onChange={(e) => setUserUsername(e.target.value)}
+              ref={editUsernameRef}
+              placeholder={user.username}
               className={styles.new_name}
             />
             <p className={styles.username_taken_warning} ref={invalidUsername}>
