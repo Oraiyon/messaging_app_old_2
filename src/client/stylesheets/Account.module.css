@@ -39,11 +39,9 @@
 .profile_picture_form > div {
   display: flex;
   gap: 0.25em;
+  width: 100%;
   align-items: center;
-}
-
-.profile_picture_form > div > input {
-  /* display: none; */
+  justify-content: space-between;
 }
 
 .default_picture_button > button {
