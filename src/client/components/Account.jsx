@@ -1,6 +1,6 @@
 import { useOutletContext } from "react-router-dom";
 import styles from "../stylesheets/Account.module.css";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Header from "./Header";
 import DisplayProfilePicture from "./DisplayProfilePicture";
 
@@ -22,48 +22,6 @@ const Account = () => {
   const invalidUsername = useRef(null);
   const formRef = useRef(null);
   const editBioRef = useRef(null);
-
-  const submitEditName = async () => {
-    try {
-      if (!editUsernameRef.current.value || editUsernameRef.current.value === user.username) {
-        return;
-      }
-      if (editUsernameRef.current.value.length < 3 || editUsernameRef.current.value.length > 10) {
-        invalidUsername.current.style.display = "flex";
-        return;
-      }
-      const fetchUser = await fetch(`/api/${user._id}/profile/account/username`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ editName: editUsernameRef.current.value })
-      });
-      const data = await fetchUser.json();
-      if (data) {
-        setUser(data);
-      } else {
-        invalidUsername.current.style.display = "flex";
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const changeProfilePicture = async (e) => {
-    try {
-      if (formRef.current.children[1].children[0].value) {
-        const formData = new FormData();
-        formData.append("file", formRef.current.children[1].children[0].files[0]);
-        const fetchUser = await fetch(`/api/${user._id}/profile/account/picture`, {
-          method: "POST",
-          body: formData
-        });
-        const data = await fetchUser.json();
-        setUser(data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const setProfilePictureToDefault = async () => {
     try {
@@ -89,13 +47,19 @@ const Account = () => {
     }
   };
 
+  const cancelProfilePictureEdit = (e) => {
+    e.preventDefault();
+    formRef.current.value = "";
+  };
+
   const ProfilePictureForm = () => {
     if (user) {
       return (
-        <form action="" ref={formRef} className={styles.profile_picture_form}>
+        <form action="" className={styles.profile_picture_form}>
           <label htmlFor="picture">Profile Picture</label>
           <div>
-            <input type="file" name="picture" id="picture" />
+            <input type="file" name="picture" id="picture" ref={formRef} />
+            <button onClick={cancelProfilePictureEdit}>Cancel</button>
           </div>
         </form>
       );
@@ -111,29 +75,47 @@ const Account = () => {
     );
   };
 
-  const editUserBio = async () => {
+  const saveChanges = async () => {
     try {
-      if (editBioRef.current.value === user.bio) {
-        return;
+      if (!editUsernameRef.current.value) {
+        invalidUsername.current.style.display = "none";
+      } else if (
+        editUsernameRef.current.value.length >= 3 &&
+        editUsernameRef.current.value.length <= 10
+      ) {
+        const fetchUser = await fetch(`/api/${user._id}/profile/account/username`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ editName: editUsernameRef.current.value })
+        });
+        const data = await fetchUser.json();
+        if (!data) {
+          invalidUsername.current.style.display = "flex";
+        }
+      } else {
+        invalidUsername.current.style.display = "flex";
+      }
+      if (formRef.current.value) {
+        const formData = new FormData();
+        formData.append("file", formRef.current.files[0]);
+        await fetch(`/api/${user._id}/profile/account/picture`, {
+          method: "POST",
+          body: formData
+        });
       }
       if (editBioRef.current.value.length <= 100) {
-        const fetchUser = await fetch(`/api/${user._id}/profile/account/bio`, {
+        await fetch(`/api/${user._id}/profile/account/bio`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ editBio: editBioRef.current.value })
         });
-        const data = fetchUser.json();
-        setUser(data);
       }
+      const fetchuser = await fetch(`/api/${user._id}/profile/messages`);
+      const data = await fetchuser.json();
+      setUser(data);
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const saveChanges = () => {
-    submitEditName();
-    changeProfilePicture();
-    editUserBio();
   };
 
   return (
