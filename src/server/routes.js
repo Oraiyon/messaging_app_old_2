@@ -61,6 +61,6 @@ router.post("/api/:id/profile/account/picture", post_change_picture);
 router.put("/api/:id/profile/account/picture", put_change_picture);
 
 // Change user.bio
-router.put("api/:id/profile/account/bio", put_user_bio);
+router.put("/api/:id/profile/account/bio", put_user_bio);
 
 export default router;
