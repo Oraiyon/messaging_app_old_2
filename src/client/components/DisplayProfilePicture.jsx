@@ -6,12 +6,15 @@ import { useRef } from "react";
 const DisplayProfilePicture = (props) => {
   const editPictureIconRef = useRef(null);
 
-  const displayEditPictureRef = (ref) => {
+  const displayEditPictureRef = () => {
     if (props.user) {
-      if (!ref.current.style.display || ref.current.style.display === "none") {
-        ref.current.style.display = "flex";
+      if (
+        !editPictureIconRef.current.style.display ||
+        editPictureIconRef.current.style.display === "none"
+      ) {
+        editPictureIconRef.current.style.display = "flex";
       } else {
-        ref.current.style.display = "none";
+        editPictureIconRef.current.style.display = "none";
       }
     }
   };
@@ -20,6 +23,7 @@ const DisplayProfilePicture = (props) => {
     props.formRef.current.click();
   };
 
+  // Make profile.picture default to default pic?
   const ProfilePicturePicker = (props) => {
     if (props.profile.picture) {
       return (
@@ -43,13 +47,12 @@ const DisplayProfilePicture = (props) => {
     }
   };
 
-  // Make profile.picture default to default pic?
   return (
     <div
       className={props.user ? "user_picture_container" : styles.profile_picture_container}
       onClick={openPictureForm}
-      onMouseOver={() => displayEditPictureRef(editPictureIconRef)}
-      onMouseOut={() => displayEditPictureRef(editPictureIconRef)}
+      onMouseOver={displayEditPictureRef}
+      onMouseOut={displayEditPictureRef}
     >
       <ProfilePicturePicker profile={props.profile} />
       <Icon
