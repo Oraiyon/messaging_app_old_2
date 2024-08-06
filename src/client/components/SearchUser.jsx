@@ -171,7 +171,7 @@ const SearchUser = (props) => {
             {props.foundUser ? <DisplayProfilePicture profile={props.foundUser} /> : ""}
             <h3>{props.foundUser ? props.foundUser.username : ""}</h3>
           </div>
-          <p className={props.foundUser.bio ? styles.foundUser_bio : ""}>
+          <p className={props.foundUser && props.foundUser.bio ? styles.foundUser_bio : ""}>
             {props.foundUser ? props.foundUser.bio : ""}
           </p>
         </div>
