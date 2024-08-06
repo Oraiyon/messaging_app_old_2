@@ -12,11 +12,6 @@
   justify-content: space-between;
 }
 
-.searched_user > div > p {
-  border: 2px solid var(--secondary-color);
-  padding: 0.25em;
-}
-
 .inactive_friend_button {
   display: none;
 }
@@ -40,4 +35,14 @@
   flex-direction: column;
   align-items: center;
   gap: 0.25em;
+}
+
+.foundUser_info > div {
+  width: 100px;
+  height: 100px;
+}
+
+.foundUser_bio {
+  border: 2px solid var(--secondary-color);
+  padding: 0.25em;
 }

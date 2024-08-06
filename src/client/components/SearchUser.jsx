@@ -169,9 +169,11 @@ const SearchUser = (props) => {
         <div>
           <div className={styles.foundUser_info}>
             {props.foundUser ? <DisplayProfilePicture profile={props.foundUser} /> : ""}
-            <p>{props.foundUser ? props.foundUser.username : ""}</p>
+            <h3>{props.foundUser ? props.foundUser.username : ""}</h3>
           </div>
-          <p>{props.foundUser ? props.foundUser.bio : ""}</p>
+          <p className={props.foundUser.bio ? styles.foundUser_bio : ""}>
+            {props.foundUser ? props.foundUser.bio : ""}
+          </p>
         </div>
         <FriendRequestButton />
       </div>
