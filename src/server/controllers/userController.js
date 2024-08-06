@@ -246,7 +246,7 @@ export const put_user_bio = [
     const user = await User.findById(req.params.id).populate("friends").exec();
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      res.json(user);
+      res.json(false);
       return;
     }
     user.bio = req.body.editBio;
