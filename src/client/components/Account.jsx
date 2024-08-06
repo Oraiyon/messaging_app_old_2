@@ -128,8 +128,8 @@ const Account = () => {
         sidebarContainer={sidebarContainer}
       />
       <div className={styles.account_container}>
-        <h3>{user.username}</h3>
         <DisplayProfilePicture profile={user} user={true} formRef={formRef} />
+        <h3>{user.username}</h3>
         <div className={styles.edits}>
           <div className={styles.edit_name_inputs}>
             <label htmlFor="editName">Username</label>

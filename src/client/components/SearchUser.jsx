@@ -167,10 +167,12 @@ const SearchUser = (props) => {
       />
       <div className={styles.searched_user}>
         <div>
-          {props.foundUser ? <DisplayProfilePicture profile={props.foundUser} /> : ""}
-          <p>{props.foundUser ? props.foundUser.username : ""}</p>
+          <div className={styles.foundUser_info}>
+            {props.foundUser ? <DisplayProfilePicture profile={props.foundUser} /> : ""}
+            <p>{props.foundUser ? props.foundUser.username : ""}</p>
+          </div>
+          <p>{props.foundUser ? props.foundUser.bio : ""}</p>
         </div>
-
         <FriendRequestButton />
       </div>
     </form>
