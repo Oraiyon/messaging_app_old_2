@@ -34,7 +34,7 @@ const DisplayProfilePicture = (props) => {
             src={props.profile.picture}
             alt="Profile Picture"
             title={props.user ? "Change Profile Picture" : ""}
-            className={props.user ? styles.user_profile_picture : styles.profile_picture}
+            className={styles.profile_picture}
           />
           <Icon
             path={mdiPencilCircleOutline}
@@ -56,7 +56,7 @@ const DisplayProfilePicture = (props) => {
           <div className={styles.default_profile_picture}>
             <Icon
               path={mdiAccountCircle}
-              className={props.user ? styles.user_profile_picture : styles.profile_picture}
+              className={styles.profile_picture}
               title="Change Profile Picture"
             />
           </div>

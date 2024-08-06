@@ -28,11 +28,14 @@
   background-color: var(--highlight-color);
 }
 
+.sidebar > div {
+  width: 100px;
+  height: 100px;
+}
+
 .sidebar > div > img,
 .sidebar > div > div > svg {
   align-self: center;
-  width: 100px;
-  height: 100px;
 }
 
 .sidebar > div > svg {
