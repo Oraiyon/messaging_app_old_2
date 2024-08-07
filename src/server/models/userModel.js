@@ -7,7 +7,7 @@ const UserSchema = new Schema({
   password: { type: String, required: true },
   // ref = model
   friends: [{ type: Schema.Types.ObjectId, ref: "users" }],
-  friendRequests: { type: Array },
+  friendRequests: [{ type: Schema.Types.ObjectId, ref: "users" }],
   picture: { type: String },
   // Add bio?
   bio: { type: String }

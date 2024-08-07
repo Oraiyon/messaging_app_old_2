@@ -5,8 +5,9 @@ import bcrypt from "bcryptjs";
 import passport from "passport";
 import multer from "multer";
 import { v2 as cloudinary } from "cloudinary";
-import dotenv from "dotenv";
+import dotenv, { populate } from "dotenv";
 import { unlink } from "node:fs/promises";
+import path from "node:path";
 
 // dest starts from root directory
 const upload = multer({ dest: "./src/server/public/uploads" });
@@ -89,7 +90,10 @@ export const logout = (req, res, next) => {
 
 export const get_profile = expressAsyncHandler(async (req, res, next) => {
   if (req.user) {
-    const user = await User.findById(req.params.id).populate("friends").exec();
+    const user = await User.findById(req.params.id)
+      .populate("friends")
+      .populate("friendRequests")
+      .exec();
     res.json(user);
   }
 });
@@ -99,42 +103,39 @@ export const get_search_profile = expressAsyncHandler(async (req, res, next) => 
   res.json(user);
 });
 
-export const post_send_friend_request = expressAsyncHandler(async (req, res, next) => {
-  const [sender, receiver] = await Promise.all([
-    User.findById(req.params.sender).populate("friends").exec(),
-    User.findById(req.params.receiver).exec()
-  ]);
-  for (const request of sender.friendRequests) {
-    if (
-      request.receiver.username === sender.username ||
-      request.receiver.username === receiver.username
-    ) {
-      return;
-    }
-  }
-  // Remove username?
-  sender.friendRequests = [
-    ...sender.friendRequests,
-    {
-      sender: { username: sender.username, id: sender._id },
-      receiver: { username: receiver.username, id: receiver._id }
-    }
-  ];
-  receiver.friendRequests = [
-    ...receiver.friendRequests,
-    {
-      sender: { username: sender.username, id: sender._id },
-      receiver: { username: receiver.username, id: receiver._id }
-    }
-  ];
-  await sender.save();
-  await receiver.save();
-  res.json(sender);
-});
+export const post_send_friend_request = [
+  expressAsyncHandler(async (req, res, next) => {
+    const [sender, receiver] = await Promise.all([
+      User.findById(req.params.sender).populate("friends").populate("friendRequests").exec(),
+      User.findById(req.params.receiver).exec()
+    ]);
+    // for (const request of sender.friendRequests) {
+    //   if (
+    //     request.receiver.username === sender.username ||
+    //     request.receiver.username === receiver.username
+    //   ) {
+    //     return;
+    //   }
+    // }
+    sender.friendRequests = [...sender.friendRequests, receiver._id];
+    receiver.friendRequests = [...receiver.friendRequests, sender._id];
+    await sender.save();
+    await receiver.save();
+    // res.json(sender);
+    next();
+  }),
+  expressAsyncHandler(async (req, res, next) => {
+    const user = await User.findById(req.params.sender)
+      .populate("friends")
+      .populate("friendRequests")
+      .exec();
+    res.json(user);
+  })
+];
 
 export const put_remove_friend_request = expressAsyncHandler(async (req, res, next) => {
   const [sender, receiver] = await Promise.all([
-    User.findById(req.params.sender).populate("friends").exec(),
+    User.findById(req.params.sender).populate("friends").populate("friendRequests").exec(),
     User.findById(req.params.receiver).exec()
   ]);
   const newFriendRequestsSender = sender.friendRequests.filter((request) =>
@@ -179,15 +180,18 @@ export const put_accept_friend_request = [
     next();
   }),
   expressAsyncHandler(async (req, res, next) => {
-    const user = await User.findById(req.params.sender).populate("friends").exec();
+    const user = await User.findById(req.params.sender)
+      .populate("friends")
+      .populate("friendRequests")
+      .exec();
     res.json(user);
   })
 ];
 
 export const put_remove_friend = expressAsyncHandler(async (req, res, next) => {
   const [user, friendUser] = await Promise.all([
-    User.findById(req.params.id).populate("friends").exec(),
-    User.findById(req.params.friend).populate("friends").exec()
+    User.findById(req.params.id).populate("friends").populate("friendRequests").exec(),
+    User.findById(req.params.friend).populate("friends").populate("friendRequests").exec()
   ]);
   const newUserFriends = user.friends.filter((friend) => friend.username !== friendUser.username);
   const newFriendUserFriends = friendUser.friends.filter(
@@ -203,7 +207,10 @@ export const put_remove_friend = expressAsyncHandler(async (req, res, next) => {
 export const put_edit_username = [
   body("editName", "Invalid username").trim().isLength({ min: 3 }).escape(),
   expressAsyncHandler(async (req, res, next) => {
-    const user = await User.findById(req.params.id).populate("friends").exec();
+    const user = await User.findById(req.params.id)
+      .populate("friends")
+      .populate("friendRequests")
+      .exec();
     const usernameTaken = await User.findOne({ username: req.body.editName }).exec();
     const errors = validationResult(req);
     if (!errors.isEmpty() || usernameTaken || req.body.editName === user.username) {
@@ -219,7 +226,10 @@ export const put_edit_username = [
 export const post_change_picture = [
   upload.single("file"),
   expressAsyncHandler(async (req, res, next) => {
-    const user = await User.findById(req.params.id).populate("friends").exec();
+    const user = await User.findById(req.params.id)
+      .populate("friends")
+      .populate("friendRequests")
+      .exec();
     await cloudinary.uploader.destroy(`messaging_app_profile_pictures/${user._id}`);
     const imageURL = await cloudinary.uploader.upload(req.file.path, {
       folder: "messaging_app_profile_pictures",
@@ -233,7 +243,10 @@ export const post_change_picture = [
 ];
 
 export const put_change_picture = expressAsyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.params.id).populate("friends").exec();
+  const user = await User.findById(req.params.id)
+    .populate("friends")
+    .populate("friendRequests")
+    .exec();
   user.picture = null;
   await cloudinary.uploader.destroy(`messaging_app_profile_pictures/${user._id}`);
   await user.save();
@@ -243,7 +256,10 @@ export const put_change_picture = expressAsyncHandler(async (req, res, next) => 
 export const put_user_bio = [
   body("editBio", "Invalid bio").isLength({ max: 100 }).escape(),
   expressAsyncHandler(async (req, res, next) => {
-    const user = await User.findById(req.params.id).populate("friends").exec();
+    const user = await User.findById(req.params.id)
+      .populate("friends")
+      .populate("friendRequests")
+      .exec();
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       res.json(false);

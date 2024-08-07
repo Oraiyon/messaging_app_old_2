@@ -31,7 +31,8 @@ const FriendRequests = (props) => {
   };
 
   const AcceptButtonHandler = (props) => {
-    if (props.request.receiver.username === props.user.username) {
+    console.log(props.request);
+    if (props.request.username === props.user.username) {
       return <button onClick={() => acceptFriendRequest(request)}>Accept</button>;
     }
   };
@@ -39,7 +40,6 @@ const FriendRequests = (props) => {
   // FIX
   // request.sender/receiver does not contain user info
   const PictureHandler = (props) => {
-    console.log(props.request.sender);
     if (props.request.receiver.username === props.user.username) {
       // return <DisplayProfilePicture profile={props.request.sender} />;
     } else {
@@ -58,20 +58,14 @@ const FriendRequests = (props) => {
       {props.user.friendRequests.length ? (
         <div className={styles.friend_requests_info}>
           {props.user.friendRequests.map((request) => (
-            <div key={request.sender.id + request.receiver.id} className={styles.friend_request}>
+            <div key={request._id} className={styles.friend_request}>
               <div>
-                <PictureHandler request={request} user={props.user} />
-                <p>
-                  {request.receiver.username === props.user.username
-                    ? request.sender.username
-                    : request.receiver.username}
-                </p>
+                {/* <PictureHandler request={request} user={props.user} /> */}
+                <p>{request.username}</p>
               </div>
               <div className={styles.friend_request_inputs}>
                 <AcceptButtonHandler user={props.user} request={request} />
-                <button onClick={() => removeFriendRequest(request)}>
-                  {request.receiver.username === props.user.username ? "Decline" : "Unsend"}
-                </button>
+                <button onClick={() => removeFriendRequest(request)}>Decline</button>
               </div>
             </div>
           ))}
