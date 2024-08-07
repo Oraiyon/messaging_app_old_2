@@ -117,8 +117,8 @@ export const post_send_friend_request = [
     //     return;
     //   }
     // }
-    sender.friendRequests = [...sender.friendRequests, receiver._id];
-    receiver.friendRequests = [...receiver.friendRequests, sender._id];
+    sender.friendRequests = [...sender.friendRequests, [sender._id, receiver._id]];
+    receiver.friendRequests = [...receiver.friendRequests, [sender._id, receiver._id]];
     await sender.save();
     await receiver.save();
     // res.json(sender);
@@ -138,16 +138,16 @@ export const put_remove_friend_request = expressAsyncHandler(async (req, res, ne
     User.findById(req.params.sender).populate("friends").populate("friendRequests").exec(),
     User.findById(req.params.receiver).exec()
   ]);
-  const newFriendRequestsSender = sender.friendRequests.filter((request) =>
-    sender.username === request.sender.username
-      ? request.receiver.username !== receiver.username
-      : request.sender.username !== receiver.username
-  );
-  const newFriendRequestsReceiver = receiver.friendRequests.filter((request) =>
-    receiver.username === request.receiver.username
-      ? request.sender.username !== sender.username
-      : request.receiver.username !== sender.username
-  );
+  // const newFriendRequestsSender = sender.friendRequests.filter((request) =>
+  //   sender.username === request.username
+  //     ? request.receiver.username !== receiver.username
+  //     : request.sender.username !== receiver.username
+  // );
+  // const newFriendRequestsReceiver = receiver.friendRequests.filter((request) =>
+  //   receiver.username === request.receiver.username
+  //     ? request.sender.username !== sender.username
+  //     : request.receiver.username !== sender.username
+  // );
   sender.friendRequests = newFriendRequestsSender;
   receiver.friendRequests = newFriendRequestsReceiver;
   await sender.save();
@@ -161,16 +161,16 @@ export const put_accept_friend_request = [
       User.findById(req.params.sender).exec(),
       User.findById(req.params.receiver).exec()
     ]);
-    const newFriendRequestsSender = sender.friendRequests.filter((request) =>
-      sender.username === request.sender.username
-        ? request.receiver.username !== receiver.username
-        : request.sender.username !== receiver.username
-    );
-    const newFriendRequestsReceiver = receiver.friendRequests.filter((request) =>
-      receiver.username === request.receiver.username
-        ? request.sender.username !== sender.username
-        : request.receiver.username !== sender.username
-    );
+    // const newFriendRequestsSender = sender.friendRequests.filter((request) =>
+    //   sender.username === request.sender.username
+    //     ? request.receiver.username !== receiver.username
+    //     : request.sender.username !== receiver.username
+    // );
+    // const newFriendRequestsReceiver = receiver.friendRequests.filter((request) =>
+    //   receiver.username === request.receiver.username
+    //     ? request.sender.username !== sender.username
+    //     : request.receiver.username !== sender.username
+    // );
     sender.friendRequests = newFriendRequestsSender;
     receiver.friendRequests = newFriendRequestsReceiver;
     sender.friends = [receiver._id, ...sender.friends];

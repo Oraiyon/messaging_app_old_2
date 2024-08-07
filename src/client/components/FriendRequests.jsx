@@ -30,22 +30,21 @@ const FriendRequests = (props) => {
     }
   };
 
-  const AcceptButtonHandler = (props) => {
-    console.log(props.request);
-    if (props.request.username === props.user.username) {
-      return <button onClick={() => acceptFriendRequest(request)}>Accept</button>;
-    }
+  // FIX
+  const ButtonHandler = (props) => {
+    console.log(props.request[0]);
+    // if (props.request._id !== props.user._id) {
+    //   return (
+    //     <>
+    //       <button onClick={() => acceptFriendRequest(request)}>Accept</button>
+    //       <button onClick={() => removeFriendRequest(request)}>Decline</button>
+    //     </>
+    //   );
+    // }
   };
 
   // FIX
-  // request.sender/receiver does not contain user info
-  const PictureHandler = (props) => {
-    if (props.request.receiver.username === props.user.username) {
-      // return <DisplayProfilePicture profile={props.request.sender} />;
-    } else {
-      // return <DisplayProfilePicture profile={props.request.receiver} />;
-    }
-  };
+  const PictureHandler = (props) => {};
 
   // Separate friend requests for sent or received?
   return (
@@ -58,14 +57,17 @@ const FriendRequests = (props) => {
       {props.user.friendRequests.length ? (
         <div className={styles.friend_requests_info}>
           {props.user.friendRequests.map((request) => (
-            <div key={request._id} className={styles.friend_request}>
+            <div key={request[0]._id + request[1].id} className={styles.friend_request}>
               <div>
-                {/* <PictureHandler request={request} user={props.user} /> */}
-                <p>{request.username}</p>
+                {/* <PictureHandler request={request} /> */}
+                <p>
+                  {request[0].username === props.user.username
+                    ? request[1].username
+                    : request[0].username}
+                </p>
               </div>
               <div className={styles.friend_request_inputs}>
-                <AcceptButtonHandler user={props.user} request={request} />
-                <button onClick={() => removeFriendRequest(request)}>Decline</button>
+                <ButtonHandler user={props.user} request={request} />
               </div>
             </div>
           ))}
